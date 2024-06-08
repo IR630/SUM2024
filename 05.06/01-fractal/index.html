@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru" class="notranslate" translate="no">
+  <head>
+    <meta name="google" content="notranslate">    
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="m.png" type="image/png" />
+    <title>IR6's first JS project</title>
+  </head>
+  <body>
+    <canvas id="myCan" width="800" height="800" style="border: 0px solid burlywood"></canvas>
+    <script type="module">
+      import * as vigl from "./mylib.js";
+ 
+      window.addEventListener("load", () => {
+        vigl.initGL();
+        const draw = () => {
+          // drawing
+          vigl.render();
+ 
+          // animation register
+          window.requestAnimationFrame(draw);
+        };
+        draw();
+        window.addEventListener("mousedown", (event) => {
+          vigl.MouseDown(event);
+        });
+        window.addEventListener("mouseup", (event) => {
+          vigl.MouseUp(event);
+        });
+      });
+    </script>
+  </body>
+</html>
