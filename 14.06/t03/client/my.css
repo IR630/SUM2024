@@ -1,0 +1,56 @@
+#str
+{
+  background-image: url("https://i.pinimg.com/originals/0d/ac/17/0dac171e7c44e5baea36c0de982f5025.jpg");
+}
+
+#chat 
+{
+  color: #f200fa;
+  background-color: #290671;   /* #8506A9 */
+  color-interpolation-filters: linearRGB;
+  width: 800px;
+  height: 600px;
+  border-radius: 15px;
+}
+
+.me 
+{
+  color: #ffdd00;
+  background-color: #7e5423;
+  color-interpolation-filters: linearRGB;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.vrag
+{
+  color: #E5FB00;
+  background-color: beige;
+  color-interpolation-filters: linearRGB;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.labe 
+{
+  color: #E5FB00;
+  background-color: #7e5423;
+  color-interpolation-filters: linearRGB;
+  border-radius: 3px;
+}
+
+.titl 
+{
+  color: #E5FB00;
+  background-color: #7e5423;
+  color-interpolation-filters: linearRGB;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.text 
+{
+  width: 150px;
+  height: 47px;
+}
+
