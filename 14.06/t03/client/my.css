@@ -8,9 +8,11 @@
   color: #f200fa;
   background-color: #290671;   /* #8506A9 */
   color-interpolation-filters: linearRGB;
-  width: 800px;
+  width: 500px;
   height: 600px;
   border-radius: 15px;
+  overflow-y: scroll;
+  text-align: left;
 }
 
 .me 
@@ -20,15 +22,25 @@
   color-interpolation-filters: linearRGB;
   border-radius: 3px;
   display: inline-block;
+  text-align: right;
+  padding: 5px;
+  margin: 10px 4px;
+  border-bottom-right-radius: 10px;
+  /* transform: translate(400px, 0px); */
 }
 
-.vrag
+.bratan
 {
   color: #E5FB00;
-  background-color: beige;
+  background-color: rgb(34, 34, 10);
   color-interpolation-filters: linearRGB;
   border-radius: 3px;
   display: inline-block;
+  text-align: left;
+  padding: 5px;
+  margin: 10px 4px;
+  /* transform: translate(-450px, 20px); */
+  z-index: 3;
 }
 
 .labe 
@@ -54,3 +66,25 @@
   height: 47px;
 }
 
+.nam 
+{
+  color: rgb(36, 211, 13);
+  color-interpolation-filters: linearRGB;
+  border-radius: 3px;
+  display: inline-block;
+  padding: 0px;
+  margin: 10px 4px;
+  /* ransform: translate(-400px, 0px); */
+}
+
+button
+{
+  transition-duration: 0.4s;
+  background-color: gray;
+}
+
+button:hover
+{
+  background-color: blueviolet;
+  color: white;
+}

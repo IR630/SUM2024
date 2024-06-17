@@ -49,8 +49,10 @@ socket.onmessage = event => {
 
   let ids = document.getElementById("chat");
 
+  let nam = document.createElement("p");
   let el = document.createElement("p");
-  el.innerText = JSON.parse(event.data).txt;
+  let e = document.createElement("br");
+  el.innerHTML = JSON.parse(event.data).txt;
   
   let name = JSON.parse(event.data).name;
 
@@ -59,14 +61,16 @@ socket.onmessage = event => {
   }
   if (name == document.getElementById("name").value) {
     el.className = "me";
-    let e = document.createElement("br");
+    ids.appendChild(el);
   } else {
     el.className = "bratan";
-    if (name != "anon") {
-      let e = document.createElement("br");
-    }
-  }
 
-  ids.appendChild(el);
-  ids.appendChild(e);
+    nam.innerText = name;
+    nam.className = "nam";
+    ids.appendChild(nam);
+    ids.appendChild(el);
+  }
+  
+  ids.appendChild(e);  
+  //$(el).empty();
 };
