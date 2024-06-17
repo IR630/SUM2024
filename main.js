@@ -1,36 +1,43 @@
 import { vec3 } from "./mth/vec3.js";
 import { mat4 } from "./mth/mat4.js";
-import { render } from "./src/anim/rnd/render.js";
-import { prim, vertex } from "./src/anim/rnd/rndprim.js";
-import { figure } from "./src/figures.js";
+import { shader } from "./src/anim/rnd/shader_class_pattern.js";
 import { camera } from "./mth/cam.js";
-
-let rnd;
+import { render, initGL } from "./src/anim/rnd/render.js";
+import { setCube } from "./src/figure/figures.js";
+import { prim } from "./src/anim/rnd/rndprim.js";
 
 function main() {
-  const canvas = document.getElementById("myCan");
+  const canvas = document.querySelector("#myCan");
   const gl = canvas.getContext("webgl2");
 
   if (window.gl == undefined) {
-    window.gl = gl
+    window.gl = gl;
   }
-  
+
   if (gl === null) {
     alert("WebGL2 not supported");
     return;
   }
+
+  //initGL();
+  //loadSh
+  gl.enable(gl.DEPTH_TEST);
   
-  rnd = new render(canvas);
+  gl.clearColor(0.30, 0.47, 0.8, 1.0);
+  let shd  = shader("default");
 
-  let vert = [
-    vertex(vec3(-1, -1, 0), vec3(0, 0, 1)),
-    vertex(vec3(1, -1, 0), vec3(0, 0, 1)),
-    vertex(vec3(1, 1, 0), vec3(0, 0, 1)),
-    vertex(vec3(1, -1, 0), vec3(0, 0, 1))
-  ]
+  const cam = camera();
+  
+  cam.frameW = canvas.clientWidth;
+  cam.frameH = canvas.clientHeight;
+  cam.projDist = 0.1;
+  cam.projSize = 0.1;
+  cam.projFarClip = 300;
 
-  //let ind = [0, 1, 2, 2, 3, 0];
-  const ind = [
+  cam.camSet(vec3(0, 0, 4), vec3(0), vec3(0, 1, 0));
+  cam.camSetProj(0.1, 0.1, 300);
+
+  let ind = [
     0, 1, 2, 
     1, 2, 4, 
     1, 4, 7, 
@@ -44,29 +51,21 @@ function main() {
     2, 6, 7,
     2, 7, 4
   ];
-  
 
-  //prim = prim(rnd, vert, ind);
-  let fig = new figure();
+  let prims = prim(shd, setCube(), ind);
 
-  fig.setTetrahedron();
-  let prim = fig.makePrim(rnd);
-  
-  //let shd = shader("default");
-  
+  shd.apply();
 
   const anim = () => {
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clear(gl.DEPTH_BUFFER_BIT);
+
     const date = new Date();
-    let t =
-      date.getMinutes() * 60 +
-      date.getSeconds() +
-      date.getMilliseconds() / 1000;
+    let t = date.getMinutes() * 60 +
+          date.getSeconds() +
+          date.getMilliseconds() / 1000;
 
-    rnd.initGL();
-    //prim.render(rnd, m.rotate(t, vec3(0, 1, 0)).mul(m.matrMulMatr(m.matrTranslate(vec3(0, 0, -3)))));
-    prim.render(rnd, mat4().rotateY(30 * t).matrMulMatr(mat4().rotateX(30 * t)));
-
-   //console.log("well done");
+    prims.render(mat4().rotateY(30 * t).matrMulMatr(mat4().rotateX(30 * t)), cam);
 
     window.requestAnimationFrame(anim);
   };
