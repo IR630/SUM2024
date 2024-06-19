@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<head>
+  <title>1one chess</title>
+  <script src="./output/index.js" type="module"></script>
+  <script src="./chess/chess.js" type="module"></script>
+  <link rel="stylesheet" href="my.css" type="text/css">
+</head>
+<body id="MyBody">
+  <h1 class="MytTitle">Hi! this is my chess.</h1>
+  <br>
+
+  <label for="name" class="MyLabel">Type ur name:</label>
+  <input type="text" id="name">
+  <br><br>
+  <label for="room" class="MyLabel">Type room name to create or enter:</label>
+  <input type="text" id="room">
+  <br><br>
+  <button id="MyButton">Ready</button>
+  <br><br>
+  <canvas
+  id="MyCan" 
+  <!-- width="400px" 
+  height="400px" -->
+  style="border: 3px solid brown; background-color: maroon;"
+  ></canvas>
+  <div style="display:none;">
+    <img id="black_pawn" alt="pawn" loadind="lazy" decoding="async" src="./chess/images/black_pawn.png" />
+    <img id="white_pawn" alt="pawn" loadind="lazy" decoding="async" src="./chess/images/white_pawn.bmp" />
+  </div>
+  <br><br>
+  <div id="chat" size="100">
+  </div>
+  <textarea type="text" class="text" id="mes">Write here</textarea>
+
+</body>
