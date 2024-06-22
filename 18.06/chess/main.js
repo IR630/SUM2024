@@ -16,6 +16,7 @@ wss.on("connection", (ws) => {
     for (let s of wss.clients)
       s.send(message.toString());
   });
+  //ws.send("Hello");
 });
 
 const host = 'localhost';

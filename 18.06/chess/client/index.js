@@ -37,6 +37,8 @@ socket.onmessage = (event) => {
   el.innerHTML = JSON.parse(event.data).text;
   let name = JSON.parse(event.data).name;
 
+  if (name == undefined)
+    return;
   if (name == document.getElementById("name").value) {
     el.className = "me";
     ids.appendChild(el);
