@@ -2,60 +2,94 @@
 
 <head>
   <title>1one chess</title>
+  <link
+    rel="shortcut icon"
+    href="./chess/images/New Piskel (1).gif"
+    type="image/png"
+  />
+  <meta name="google" content="notranslate" />
+  <meta charset="utf-8" />
   <script src="./output/index.js" type="module"></script>
   <script src="./chess/chess.js" type="module"></script>
   <script src="./chess/audio/audio.js" type="module"></script>
   <script src="./scuf.js" type="module"></script>
-  <link rel="stylesheet" href="my.css" type="text/css">
-
-
-  <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-  <link href="http://vjs.zencdn.net/c/video-js.css" rel="stylesheet">
-  <script src="http://vjs.zencdn.net/c/video.js"></script> -->
+  <link rel="stylesheet" href="my.css" type="text/css" />
 </head>
 <body id="MyBody">
-  <audio loop="loop" src="./chess/audio/collection/nirvana.mp3" id="music"></audio>
-  <button id="musicButton" data-playing="false" role="switch" aria-checked="false">
+  <audio
+    loop="loop"
+    src="./chess/audio/collection/nirvana.mp3"
+    id="music"
+  ></audio>
+  <button
+    id="musicButton"
+    data-playing="false"
+    role="switch"
+    aria-checked="false"
+  >
     <span>Play / pause music</span>
   </button>
 
-  <h1 class="MytTitle">Hi! this is my chess.</h1>
-  <br>
+  <h1 class="MyTitle">Hi! this is my chess.</h1>
+  <br />
 
   <label for="name" class="MyLabel">Type ur name:</label>
-  <input type="text" id="name">
-  <br><br>
+  <input type="text" id="name" />
+  <br /><br />
   <label for="room" class="MyLabel">Type room name to create or enter:</label>
-  <input type="text" id="room">
-  <br><br>
+  <input type="text" id="room" />
+  <br /><br />
   <button id="MyButton">Ready</button>
-  <br><br>  
-  <canvas
-  id="MyCan" 
-  width="800px" 
-  height="800px"
-  ></canvas>
-  <div style="display:none;" id="pole">
+  <br /><br />
+  <canvas id="MyCan" width="800px" height="800px"></canvas>
+  <div style="display: none" id="pole">
     <img id="black_pawn" alt="pawn" src="./chess/images/New Piskel (1).gif" />
     <img id="white_pawn" alt="pawn" src="./chess/images/LOGO30.bmp" />
     <img id="black_bishop" alt="bishop" src="./chess/images/black_bishop.png" />
     <img id="white_bishop" alt="bishop" src="./chess/images/fun.png" />
-    <img id="white_rook" alt="rook" src="./chess/images/am.webp" />
-    <img id="black_rook" alt="rook" src="./chess/images/M3.BMP" />
+    <img id="white_rook" alt="rook" src="./chess/images/white_rook.png" />
+    <img id="black_rook" alt="rook" src="./chess/images/black_rook.png" />
     <img id="white_queen" alt="queen" src="./chess/images/SOVA.BMP" />
-    <img id="black_queen" alt="queen" src="./chess/images/SOVA.BMP" />
+    <img id="black_queen" alt="queen" src="./chess/images/black_queen.png" />
     <img id="white_knight" alt="knight" src="./chess/images/knight.png" />
+    <img id="black_knight" alt="knight" src="./chess/images/black_knight.png" />
+    <img id="white_king" alt="king" src="./chess/images/white_king.png" />
+    <img id="black_king" alt="king" src="./chess/images/black_king.png" />
   </div>
 
- 
-  <br>
+  <br />
   <button id="hod">Sure</button>
-  <br><br>
-  <div id="chat" size="100">
-  </div>
+  <br /><br />
+  <div id="chat" size="100"></div>
   <textarea type="text" class="text" id="mes">Write here</textarea>
 
+  <div class="video-content">
+    <iframe
+      src="https://www.youtube.com/embed/0mkzcQ8W3-g?si=AW3Ur405WXiqYxBS&controls=0&autoplay=1&mute=1&playsinline=1&loop=1"
+    ></iframe>
 
-  <div id="loader"></div>
-  <div id="content">Gif here</div>
+  </div
+  <!-- <button id="myBtn" onclick="myFunction()">Pause</button> -->
+  <script>
+    // Get the video
+    let video = document.getElementById("myVideo");
+
+    // Get the button
+    let btn = document.getElementById("myBtn");
+
+    // Pause and play the video, and change the button text
+    function myFunction() {
+      if (video.paused) {
+        let playPromise = video.play();
+
+        if (playPromise !== undefined) {
+          playPromise.then((_) => {}).catch((error) => {});
+        }
+        btn.innerHTML = "Pause";
+      } else {
+        video.pause();
+        btn.innerHTML = "Play";
+      }
+    }
+  </script>
 </body>
