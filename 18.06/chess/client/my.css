@@ -1,7 +1,6 @@
-#chat 
-{
+#chat {
   color: #f200fa;
-  background-color: #290671;   /* #8506A9 */
+  background-color: #290671; /* #8506A9 */
   color-interpolation-filters: linearRGB;
   width: 200px;
   height: 400px;
@@ -10,8 +9,7 @@
   text-align: left;
 }
 
-.me
-{
+.me {
   color: #ffdd00;
   background-color: #7e5423;
   color-interpolation-filters: linearRGB;
@@ -22,9 +20,8 @@
   margin: 10px 4px;
 }
 
-.bratan
-{
-  color: #E5FB00;
+.bratan {
+  color: #e5fb00;
   background-color: rgb(34, 34, 10);
   color-interpolation-filters: linearRGB;
   border-radius: 3px;
@@ -35,32 +32,84 @@
   z-index: 3;
 }
 
-.black
-{
-  color:#f200fa;
+.black {
+  color: #f200fa;
 }
 
-#MyCan
-{
+#MyCan {
   border: 3px;
   border-color: #4c06bd;
   display: block;
   margin: 0 auto;
 }
 
-#MyBody
-{
-  background-color:#15033a;
+#MyBody {
+  background-color: #15033a;
 }
 
-#musicButton
-{
+#musicButton {
   position: absolute;
   top: 100px;
-  right: 300px
+  right: 300px;
 }
 
-#awdawdawdwadaw {
-  width: 300px;
-  height: 300px;
+#pole {
+  position: fixed;
+  z-index: 1;
 }
+
+/* Style the video: 100% width and height to cover the entire window */
+#myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  z-index: -1;
+}
+
+/* Add some content at the bottom of the video/page */
+.content {
+  /* position: fixed;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: #f1f1f1;
+  width: 100%;
+  padding: 20px;
+  z-index: -100; */
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 50%;
+  min-height: 50%;
+  z-index: -1;
+}
+
+/* Style the button used to pause/play the video */
+#myBtn {
+  width: 200px;
+  font-size: 18px;
+  padding: 10px;
+  border: none;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+}
+
+#myBtn:hover {
+  background: #ddd;
+  color: black;
+}
+/* 
+@media (min-aspect-ratio: 16/9) {
+  video {
+    width: 100%;
+    height: auto;
+  }
+}
+@media (max-aspect-ratio: 16/9) {
+  video {
+    width: auto;
+    height: 100%;
+  }
+} */
