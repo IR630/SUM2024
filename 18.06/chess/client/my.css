@@ -6,6 +6,7 @@
   height: 400px;
   border-radius: 15px;
   overflow-y: scroll;
+  overflow-x: hidden;
   text-align: left;
 }
 
@@ -87,7 +88,8 @@
 
 /* Style the button used to pause/play the video */
 #myBtn {
-  width: 200px;
+  width: 100px;
+  height: 100px;
   font-size: 18px;
   padding: 10px;
   border: none;
@@ -100,6 +102,35 @@
   background: #ddd;
   color: black;
 }
+
+/* Style the button used to pause/play the video */
+#myMusic {
+  width: 300px;
+  height: 100px;
+  font-size: 18px;
+  padding: 5px;
+  border: none;
+  background: #4c06bd;
+  color: bisque;
+  cursor: pointer;
+}
+
+.MyLabel {
+  color: wheat;
+}
+
+/* Style the button used to pause/play the video */
+#MyButton {
+  width: 100px;
+  height: 100px;
+  font-size: 18px;
+  padding: 10px;
+  border: none;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+}
+
 /* 
 @media (min-aspect-ratio: 16/9) {
   video {

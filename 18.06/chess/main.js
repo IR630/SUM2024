@@ -11,15 +11,11 @@ const wss = new WebSocketServer({ server });
 
 wss.on("connection", (ws) => {
   ws.on("message", (message) => {
-    // console.log(message.toString());
-
-    for (let s of wss.clients)
-      s.send(message.toString());
+    for (let s of wss.clients) s.send(message.toString());
   });
-  //ws.send("Hello");
 });
 
-const host = 'localhost';
+const host = "localhost";
 const port = 3030;
 
 server.listen(port, host, () => {

@@ -1,3 +1,67 @@
+// import { shader } from "./src/shd/shd.js";
+// import { camera } from "./src/mth/cam.js";
+// import { prim } from "./src/rnd/prim.js";
+// import { setCube } from "./src/figures/figures.js";
+// import { render } from "./src/rnd/render.js";
+// import { vec3 } from "./src/mth/vec3.js";
+// import { mat4 } from "./src/mth/mat4.js";
+
+// function play() {
+//   const canvas = document.querySelector("#MyCan");
+//   const gl = canvas.getContext("webgl2");
+
+//   if (gl == null) {
+//     alert("WebGL2 not supported");
+//     return;
+//   }
+
+//   if (window.gl == undefined)
+//     window.gl = gl;
+
+//   gl.enable(gl.DEPTH_TEST);
+//   gl.clearColor(0, 0, 0, 1.0);
+
+//   let shd = shader("default");
+
+//   const cam = camera();
+//   cam.frameW = canvas.clientWidth;
+//   cam.frameH = canvas.clientHeight;
+//   cam.projDist = 0.1;
+//   cam.projSize = 0.1;
+//   cam.projFarClip = 300;
+
+//   cam.camSet(vec3(0, 0, 4), vec3(0), vec3(0, 1, 0));
+//   cam.camSetProj(0.1, 0.1, 300);
+
+//   let Prim = prim(shd, setCube());
+
+//   shd.apply();
+
+//   const anim = () => {
+//     gl.clear(gl.COLOR_BUFFER_BIT);
+//     gl.clear(gl.DEPTH_BUFFER_BIT);
+
+//     const date = new Date();
+//     let t = date.getMinutes() * 60 +
+//           date.getSeconds() +
+//           date.getMilliseconds() / 1000;
+
+//     Prim.render(mat4().matrMulMatr(mat4().rotateX(30 * t)), cam);
+//     // Prim.render(mat4(), cam);
+
+//     window.requestAnimationFrame(anim);
+//   };
+
+//   anim();
+// }
+
+// window.addEventListener("load", () => {
+//   play();
+// });
+
+//--------------------------------------------------------------------
+
+// Canvas and context
 const canvas = document.getElementById("MyCan");
 const ctx = canvas.getContext("2d");
 
@@ -7,16 +71,9 @@ let fieldFig = [];
 let premoveField = [];
 // Field of impossible moves
 let dangerField = [];
-// Board field
-let boardField = [];
+
 // Size of square
-let sizeSq = canvas.clientWidth / 8;
-// Bool variable for shah
-let flagShah = false;
-// Turn
-let turn = true;
-// Castling
-let isCastling = false;
+let sizeSq = 100;
 
 // Images
 const wpImage = document.getElementById("white_pawn"),
@@ -54,13 +111,16 @@ function draw() {
 draw();
 
 function drawBoard() {
+  let field = [];
+
   // Class of figures
   let colB = [],
     colW = [];
   colB.className = "black";
   colW.className = "white";
 
-  for (let i = 0; i < 8; i++)
+  for (let i = 0; i < 8; i++) {
+    field[i] = [];
     for (let j = 0; j < 8; j++) {
       //Lines (vert)
       // ctx.beginPath();
@@ -76,41 +136,79 @@ function drawBoard() {
       // ctx.stroke();
 
       // fields
-      if (drawBoard.x == undefined) {
-        drawBoard.x = 0;
-        drawBoard.y = 0;
-      }
-      let flag = false;
-      if (boardField[i][j] == "h") {
-        ctx.beginPath();
-        ctx.fillStyle = "green";
-        ctx.rect(i * sizeSq, j * sizeSq, sizeSq, sizeSq);
-        ctx.fill();
-        flag = true;
-        drawBoard.x = i;
-        drawBoard.y = j;
-      }
-
-      if (boardField[drawBoard.x][drawBoard.y] != "h") flag = false;
-
-      if (((j % 2 == 0 && i % 2 != 0) || (i % 2 == 0 && j % 2 != 0)) && !flag) {
-        boardField[i][j] = "black";
+      if ((j % 2 == 0 && i % 2 != 0) || (i % 2 == 0 && j % 2 != 0)) {
+        field[i][j] = "black";
         ctx.beginPath();
         ctx.fillStyle = "purple";
         ctx.rect(i * sizeSq, j * sizeSq, sizeSq, sizeSq);
         ctx.fill();
-        colB.push(boardField[i][j]);
+        colB.push(field[i][j]);
       } else {
-        if (!flag) {
-          boardField[i][j] = "white";
-          ctx.beginPath();
-          ctx.fillStyle = "white";
-          ctx.rect(i * sizeSq, j * sizeSq, sizeSq, sizeSq);
-          ctx.fill();
-          colB.push(boardField[i][j]);
-        }
+        field[i][j] = "white";
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.rect(i * sizeSq, j * sizeSq, sizeSq, sizeSq);
+        ctx.fill();
+        colB.push(field[i][j]);
       }
     }
+  }
+  ctx.beginPath();
+  ctx.moveTo(8 * sizeSq, 0);
+  ctx.lineTo(8 * sizeSq, canvas.clientHeight);
+  ctx.lineWidth = 0.5;
+  ctx.stroke();
+  //horiz
+  ctx.beginPath();
+  ctx.moveTo(0, 8 * sizeSq);
+  ctx.lineTo(canvas.clientWidth, 8 * sizeSq);
+  ctx.lineWidth = 0.5;
+  ctx.stroke();
+}
+
+function drawBoardBlack() {
+  let field = [];
+
+  // Class of figures
+  let colB = [],
+    colW = [];
+  colB.className = "black";
+  colW.className = "white";
+
+  for (let i = 0; i < 8; i++) {
+    field[i] = [];
+    for (let j = 0; j < 8; j++) {
+      //Lines (vert)
+      // ctx.beginPath();
+      // ctx.moveTo(i * sizeSq, 0);
+      // ctx.lineTo(i * sizeSq, canvas.clientHeight);
+      // ctx.lineWidth = 0.3;
+      // ctx.stroke();
+      // //horiz
+      // ctx.beginPath();
+      // ctx.moveTo(0, j * sizeSq);
+      // ctx.lineTo(canvas.clientWidth, j * sizeSq);
+      // ctx.lineWidth = 0.3;
+      // ctx.stroke();
+
+      // fields
+      if ((j % 2 == 0 && i % 2 != 0) || (i % 2 == 0 && j % 2 != 0)) {
+        field[i][j] = "black";
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.rect(i * sizeSq, j * sizeSq, sizeSq, sizeSq);
+        ctx.fill();
+        colB.push(field[i][j]);
+      } else {
+        field[i][j] = "white";
+        ctx.beginPath();
+        ctx.fillStyle = "purple";
+        ctx.rect(i * sizeSq, j * sizeSq, sizeSq, sizeSq);
+        ctx.fill();
+        colB.push(field[i][j]);
+      }
+    }
+  }
   ctx.beginPath();
   ctx.moveTo(8 * sizeSq, 0);
   ctx.lineTo(8 * sizeSq, canvas.clientHeight);
@@ -134,7 +232,7 @@ function move(event) {
   if (x > 7 || y > 7 || x < 0 || y < 0) return;
   console.log(`${x} ${y}`);
 
-  if (turn == undefined) turn = true;
+  if (move.turn == undefined) move.turn = true;
 
   if (move.isRedact == undefined) {
     move.isRedact = false;
@@ -154,7 +252,6 @@ function move(event) {
     if (move.pos.x != x && move.pos.y != y) {
       // one color
       if (fieldFig[x][y].color == fieldFig[move.pos.x][move.pos.y].color) {
-        //turn = !turn;
         return;
       }
 
@@ -168,160 +265,105 @@ function move(event) {
         fieldFig[move.pos.x][move.pos.y].color = "none";
         fieldFig[move.pos.x][move.pos.y].type = "none";
         move.isRedact = false;
-        let a = { con: fieldFig, turn: turn };
+        let a = { con: fieldFig };
         socket.send(JSON.stringify(a));
       }
-      //turn = !turn;
-      move.isRedact = false;
+      move.turn = !move.turn;
       return;
     } else {
       if (move.isRedact) {
         move.isRedact = false;
         closePredict();
-        boardField[move.pos.x][move.pos.y] = "";
         return;
       }
     }
 
     if (
-      (turn && fieldFig[x][y].color == "w") ||
-      (!turn && fieldFig[x][y].color == "b")
+      (move.turn && fieldFig[x][y].color == "w") ||
+      (!move.turn && fieldFig[x][y].color == "b")
     )
       move.isRedact = true;
     else return;
-  } else if (
-    fieldFig[x][y].type == "none" &&
-    premoveField[x][y] != "p" &&
-    premoveField[x][y] != "r"
-  ) {
-    return;
-  } else if (premoveField[x][y] == "r") {
-    if (x == 2) {
-      if (fieldFig[move.pos.x][move.pos.y].color == "w") {
-        fieldFig[x + 1][y].type = "wr";
-        fieldFig[x + 1][y].color = "w";
-        fieldFig[x][y].type = "wk";
-        fieldFig[x][y].color = "w";
-
-        fieldFig[move.pos.x][move.pos.y].type = "none";
-        fieldFig[move.pos.x][move.pos.y].color = "none";
-        boardField[move.pos.x][move.pos.y] = "";
-        fieldFig[0][7].type = "none";
-        fieldFig[0][7].color = "none";
-      } else {
-        fieldFig[x + 1][y].type = "br";
-        fieldFig[x + 1][y].color = "b";
-        fieldFig[x][y].type = "bk";
-        fieldFig[x][y].color = "b";
-
-        fieldFig[move.pos.x][move.pos.y].type = "none";
-        fieldFig[move.pos.x][move.pos.y].color = "none";
-        boardField[move.pos.x][move.pos.y] = "";
-        fieldFig[0][0].type = "none";
-        fieldFig[0][0].color = "none";
-      }
-    } else {
-      if (fieldFig[move.pos.x][move.pos.y].color == "w") {
-        fieldFig[x - 1][y].type = "wr";
-        fieldFig[x - 1][y].color = "w";
-        fieldFig[x][y].type = "wk";
-        fieldFig[x][y].color = "w";
-
-        fieldFig[move.pos.x][move.pos.y].type = "none";
-        fieldFig[move.pos.x][move.pos.y].color = "none";
-        boardField[move.pos.x][move.pos.y] = "";
-        fieldFig[7][7].type = "none";
-        fieldFig[7][7].color = "none";
-      } else {
-        fieldFig[x - 1][y].type = "br";
-        fieldFig[x - 1][y].color = "b";
-        fieldFig[x][y].type = "bk";
-        fieldFig[x][y].color = "b";
-
-        fieldFig[move.pos.x][move.pos.y].type = "none";
-        fieldFig[move.pos.x][move.pos.y].color = "none";
-        boardField[move.pos.x][move.pos.y] = "";
-        fieldFig[7][0].type = "none";
-        fieldFig[7][0].color = "none";
-      }
-    }
-
-    turn = !turn;
-    closePredict();
+  } else if (fieldFig[x][y].type == "none" && premoveField[x][y] != "p") {
     return;
   } else {
     let flag = "none";
 
     if (move.isRedact) {
-      let oldColor, oldType, newType, newColor;
-
-      if (fieldFig[x - 1][y].type == "wr") isCastling = true;
-
+      let oldColor, oldType;
       oldColor = fieldFig[move.pos.x][move.pos.y].color;
       oldType = fieldFig[move.pos.x][move.pos.y].type;
-      newColor = fieldFig[x][y].color;
-      newType = fieldFig[x][y].type;
 
-      if (flagShah) {
-        if (fieldFig[x][y].type == "wk" || fieldFig[x][y].type == "bk")
-          flag = moveChess(x, y, move.oldArr.type);
-      } else {
-        flag = moveChess(x, y, move.oldArr.type);
-        fieldFig[move.pos.x][move.pos.y].color = "none";
-        fieldFig[move.pos.x][move.pos.y].type = "none";
-        if (flag == true) {
-          let flagMove;
+      flag = moveChess(x, y, move.oldArr.type);
+      fieldFig[move.pos.x][move.pos.y].color = "none";
+      fieldFig[move.pos.x][move.pos.y].type = "none";
+      if (flag == true) {
+        let flagMove;
+        let col;
+        if (move.turn) col = "bk";
+        else col = "wk";
 
-          let qu = kingDangerForMe(x, y, fieldFig[x][y]);
-          if (qu == false) {
-            closePredict();
-            fieldFig[move.pos.x][move.pos.y].color = oldColor;
-            fieldFig[move.pos.x][move.pos.y].type = oldType;
-            fieldFig[x][y].type = newType;
-            fieldFig[x][y].color = newColor;
-            return;
-          }
-          flagMove = canMove(fieldFig[x][y].color);
-          if (!flagMove) return;
-          //checkKing(col);
-          closePredict(); ///
-          if (isCastling) fieldFig[move.pos.x][move.pos.y].type = "wr";
+        let qu = kingDangerForMe(x, y, fieldFig[x][y]);
+        if (qu == false) {
+          fieldFig[move.pos.x][move.pos.y].color = oldColor;
+          fieldFig[move.pos.x][move.pos.y].type = oldType;
+          fieldFig[x][y].type = "none";
+          fieldFig[x][y].color = "none";
 
-          fieldFig[move.pos.x][move.pos.y].type = "none";
-          fieldFig[move.pos.x][move.pos.y].color = "none";
-          boardField[move.pos.x][move.pos.y] = "";
-          turn = !turn;
-        } else {
-          move.isRedact = false;
-          //boardField[move.pos.x][move.pos.y] = "h";
-          closePredict();
+          alert("qu return");
+          return;
         }
+        // let ququ = kingDangerForOther(x, y, fieldFig[x][y]);
+        // if (ququ == false) {
+        //   alert("ququ return");
+        //   return;
+        // }
+        flagMove = canMove(fieldFig[x][y].color);
+        if (!flagMove) return;
+        //premoveField[x - j][y - i] = "o";
+        //checkKing(col);
+        closePredict(); ///
+
+        fieldFig[move.pos.x][move.pos.y].type = "none";
+        fieldFig[move.pos.x][move.pos.y].color = "none";
+        move.turn = !move.turn;
+      } else {
+        move.isRedact = false;
+        closePredict();
       }
     }
     if (flag == "none" || flag == true) {
-      if (fieldFig[x][y].type == "wr") isCastling = true;
-      if (isCastling) {
-        fieldFig[move.pos.x][move.pos.y].type = "wr";
-        fieldFig[move.pos.x][move.pos.y].color = "w";
-        alert("sdsd");
-      }
       Go(move.oldArr, event);
       move.isRedact = false;
     }
   }
 
   if (move.isRedact) {
-    if (!isCastling) {
-      predictMove(move.pos.x, move.pos.y, fieldFig[move.pos.x][move.pos.y], 1);
-      boardField[x][y] = "h";
-    } else {
-      if (fieldFig[x][y].type == "wr") {
-      } else closePredict();
-    }
+    predictMove(move.pos.x, move.pos.y, fieldFig[move.pos.x][move.pos.y], 1);
+    // !!! for not predict if u cant
+    // let oldType = fieldFig[x][y].type;
+    //let oldColor = fieldFig[x][y].color;
+    //predictMove(move.pos.x, move.pos.y, fieldFig[move.pos.x][move.pos.y], 1);
+    //moveChess(x, y, fieldFig[x][y]);
+    // uslovnoMove(x, y, fieldFig[x][y]);
+    // let qu = kingDangerForMe(x, y, fieldFig[x][y]);
+    // if (qu == false) {
+    //   closePredict();
+    //   return;
+    // } else {
+    //   fieldFig[x][y].type = oldType;
+    //   fieldFig[x][y].color = oldColor;
+    // }
+    // return;
   }
 
-  let a = { con: fieldFig, turn: turn };
+  let a = { con: fieldFig };
   socket.send(JSON.stringify(a));
+}
+
+function uslovnoMove(x, y, type) {
+  fieldFig[x][y].type = "none";
+  fieldFig[x][y].color = "none";
 }
 
 function canMove(color) {
@@ -334,7 +376,7 @@ function canMove(color) {
 
   for (let i = 0; i < 8; i++)
     for (let j = 0; j < 8; j++) {
-      if (dangerField[i][j] == "o" && fieldFig[i][j].type != fig) a = false;
+      if (premoveField[i][j] == "o" && fieldFig[i][j] == fig) a = false;
     }
 
   if (a) return true;
@@ -361,8 +403,8 @@ function kingDangerForMe(x, y, type) {
 
   dangerSq(r, c, fieldFig[r][c]);
 
-  if (dangerField[r][c] == "o") {
-    alert("Its check, defeat!");
+  if (premoveField[r][c] == "o") {
+    alert("U cant");
     return false;
   } else return true;
 }
@@ -387,10 +429,24 @@ function kingDangerForOther(x, y, type) {
 
   dangerSq(r, c, fieldFig[r][c]);
 
-  if (dangerField[r][c] == "o") {
+  if (premoveField[r][c] == "o") {
     alert("SHAh");
     return false;
   } else return true;
+}
+
+function checkKing(type) {
+  let x, y;
+  let flag = true;
+
+  for (let i = 0; i < 8; i++)
+    for (let j = 0; j < 8; j++) {
+      if (fieldFig[i][j].type == type) {
+        x = i;
+        y = j;
+      }
+    }
+  if (premoveField[x][y] == "o") alert("SHAh");
 }
 
 function predictMove(x, y, type, predict) {
@@ -466,7 +522,7 @@ function knightMove(x, y, type, predict) {
           fieldFig[x + i][y + j].type == "wk" ||
           fieldFig[x + i][y + j].type == "bk"
         )
-          dangerField[x + i][y + j] = "o";
+          premoveField[x + i][y + j] = "o";
         else dangerField[x + i][y + j] = "i";
       }
     }
@@ -479,7 +535,7 @@ function knightMove(x, y, type, predict) {
           fieldFig[x + j][y + i].type == "wk" ||
           fieldFig[x + j][y + i].type == "bk"
         )
-          dangerField[x + j][y + i] = "o";
+          premoveField[x + j][y + i] = "o";
         else dangerField[x + j][y + i] = "i";
       }
     }
@@ -492,7 +548,7 @@ function knightMove(x, y, type, predict) {
           fieldFig[x - i][y + j].type == "wk" ||
           fieldFig[x - i][y + j].type == "bk"
         )
-          dangerField[x - i][y + j] = "o";
+          premoveField[x - i][y + j] = "o";
         else dangerField[x - i][y + j] = "i";
       }
     }
@@ -505,7 +561,7 @@ function knightMove(x, y, type, predict) {
           fieldFig[x - j][y + i].type == "wk" ||
           fieldFig[x - j][y + i].type == "bk"
         )
-          dangerField[x - j][y + i] = "o";
+          premoveField[x - j][y + i] = "o";
         else dangerField[x - j][y + i] = "i";
       }
     }
@@ -518,7 +574,7 @@ function knightMove(x, y, type, predict) {
           fieldFig[x + i][y - j].type == "wk" ||
           fieldFig[x + i][y - j].type == "bk"
         )
-          dangerField[x + i][y - j] = "o";
+          premoveField[x + i][y - j] = "o";
         else dangerField[x + i][y - j] = "i";
       }
     }
@@ -531,7 +587,7 @@ function knightMove(x, y, type, predict) {
           fieldFig[x + j][y - i].type == "wk" ||
           fieldFig[x + j][y - i].type == "bk"
         )
-          dangerField[x + j][y - i] = "o";
+          premoveField[x + j][y - i] = "o";
         else dangerField[x + j][y - i] = "i";
       }
     }
@@ -544,7 +600,7 @@ function knightMove(x, y, type, predict) {
           fieldFig[x - i][y - j].type == "wk" ||
           fieldFig[x - i][y - j].type == "bk"
         )
-          dangerField[x - i][y - j] = "o";
+          premoveField[x - i][y - j] = "o";
         else dangerField[x - i][y - j] = "i";
       }
     }
@@ -557,7 +613,7 @@ function knightMove(x, y, type, predict) {
           fieldFig[x - j][y - i].type == "wk" ||
           fieldFig[x - j][y - i].type == "bk"
         )
-          dangerField[x - j][y - i] = "o";
+          premoveField[x - j][y - i] = "o";
         else dangerField[x - j][y - i] = "i";
       }
     }
@@ -569,40 +625,21 @@ function kingMove(x, y, type, predict) {
   bishopMove(x, y, type, predict);
   dangerSq(x, y, type);
 
+  // let arr = [];
+  // let bool = true;
   for (let i = 0; i < 8; i++)
     for (let j = 0; j < 8; j++)
-      if (premoveField[i][j] == "p" && dangerField[i][j] == "i")
+      if (premoveField[i][j] == "p" && dangerField[i][j] == "i") {
+        if (premoveField[x][y] == "o") alert("Shah from king");
         premoveField[i][j] = "";
+      }
 
-  if (fieldFig[x][y].color == "w") {
-    if (
-      fieldFig[0][7].type == "wr" &&
-      fieldFig[1][7].type == "none" &&
-      fieldFig[2][7].type == "none" &&
-      fieldFig[3][7].type == "none"
-    )
-      premoveField[2][7] = "r";
-    if (
-      fieldFig[7][7].type == "wr" &&
-      fieldFig[6][7].type == "none" &&
-      fieldFig[5][7].type == "none"
-    )
-      premoveField[6][7] = "r";
-  } else if (fieldFig[x][y].color == "b") {
-    if (
-      fieldFig[0][0].type == "br" &&
-      fieldFig[1][0].type == "none" &&
-      fieldFig[2][0].type == "none" &&
-      fieldFig[3][0].type == "none"
-    )
-      premoveField[2][0] = "r";
-    if (
-      fieldFig[7][0].type == "br" &&
-      fieldFig[6][0].type == "none" &&
-      fieldFig[5][0].type == "none"
-    )
-      premoveField[6][0] = "r";
-  }
+  // if (premoveField[x][y] == "o") alert("SHAH");
+
+  // if (arr.length == 0) alert("u lost sorry");
+  // else {
+  //   for (let i = 0; i < arr.length; i++) {}
+  // }
 }
 
 function queenMove(x, y, type, predict) {
@@ -632,14 +669,14 @@ function rookMove(x, y, type, predict) {
       ) {
         premoveField[x + i][y] = "p";
         break;
-      } else if (fieldFig[x + i][y].type == crown) dangerField[x + i][y] = "o";
+      } else if (fieldFig[x + i][y].type == crown) premoveField[x + i][y] = "o";
       else break;
       i++;
     } else {
       // King move
 
       if (fieldFig[x + i][y].type == "none") dangerField[x + i][y] = "i";
-      else if (fieldFig[x + i][y].type == crown) dangerField[x + i][y] = "o";
+      else if (fieldFig[x + i][y].type == crown) premoveField[x + i][y] = "o";
       else if (fieldFig[x + i][y].color == type.color) break;
       i++;
     }
@@ -659,7 +696,7 @@ function rookMove(x, y, type, predict) {
       // King move
 
       if (fieldFig[x - i][y].type == "none") dangerField[x - i][y] = "i";
-      else if (fieldFig[x - i][y].type == crown) dangerField[x - i][y] = "o";
+      else if (fieldFig[x - i][y] == crown) premoveField[x - i][y] = "o";
       else if (fieldFig[x - i][y].color == type.color) break;
       else break;
       i++;
@@ -680,7 +717,7 @@ function rookMove(x, y, type, predict) {
       // King move
 
       if (fieldFig[x][y + i].type == "none") dangerField[x][y + i] = "i";
-      else if (fieldFig[x][y + i].type == crown) dangerField[x][y + i] = "o";
+      else if (fieldFig[x][y + i].type == crown) premoveField[x][y + i] = "o";
       else if (fieldFig[x][y + i].color == type.color) break;
       else break;
       i++;
@@ -701,7 +738,7 @@ function rookMove(x, y, type, predict) {
       // King move
 
       if (fieldFig[x][y - i].type == "none") dangerField[x][y - i] = "i";
-      else if (fieldFig[x][y - i].type == crown) dangerField[x][y - i] = "o";
+      else if (fieldFig[x][y - i].type == crown) premoveField[x][y - i] = "o";
       else if (fieldFig[x][y - i].color == type.color) break;
       else break;
       i++;
@@ -729,7 +766,7 @@ function bishopMove(x, y, type, predict) {
       if (fieldFig[x + i][y + i].type == "none")
         dangerField[x + i][y + i] = "i";
       else if (fieldFig[x + i][y + i].type == crown)
-        dangerField[x + i][y + i] = "o";
+        premoveField[x + i][y + i] = "o";
       else if (fieldFig[x + i][y + i].color == type.color) break;
       else break;
       i++;
@@ -751,7 +788,7 @@ function bishopMove(x, y, type, predict) {
       if (fieldFig[x - i][y - i].type == "none")
         dangerField[x - i][y - i] = "i";
       else if (fieldFig[x - i][y - i].type == crown)
-        dangerField[x - i][y - i] = "o";
+        premoveField[x - i][y - i] = "o";
       else if (fieldFig[x - i][y - i].color == type.color) break;
       else break;
       i++;
@@ -773,7 +810,7 @@ function bishopMove(x, y, type, predict) {
       if (fieldFig[x - i][y + i].type == "none")
         dangerField[x - i][y + i] = "i";
       else if (fieldFig[x - i][y + i].type == crown)
-        dangerField[x - i][y + i] = "o";
+        premoveField[x - i][y + i] = "o";
       else if (fieldFig[x - i][y + i].color == type.color) break;
       else break;
       i++;
@@ -795,7 +832,7 @@ function bishopMove(x, y, type, predict) {
       if (fieldFig[x + i][y - i].type == "none")
         dangerField[x + i][y - i] = "i";
       else if (fieldFig[x + i][y - i].type == crown)
-        dangerField[x + i][y - i] = "o";
+        premoveField[x + i][y - i] = "o";
       else if (fieldFig[x + i][y - i].color == type.color) break;
       else break;
       i++;
@@ -804,19 +841,8 @@ function bishopMove(x, y, type, predict) {
 }
 
 function pawnMove(x, y, type, predict) {
-  let col = colorFromType(type);
-  let queen;
-
-  if (col == "w") queen = "wq";
-  else queen = "bq";
-  if (y == 0) {
-    fieldFig[x][y].type = queen;
-    fieldFig[x][y].type = col;
-  }
-
   if (type.color == "w") {
     if (predict) {
-      // WHITE!
       // Default move
       if (y - 1 >= 0) {
         if (fieldFig[x][y - 1].type == "none") {
@@ -839,15 +865,11 @@ function pawnMove(x, y, type, predict) {
         premoveField[x - 1][y - 1] = "p";
       else if (fieldFig[x - 1][y - 1].type == "none" && !predict)
         dangerField[x - 1][y - 1] = "i";
-      else if (fieldFig[x - 1][y - 1].type == "bk")
-        dangerField[x - 1][y - 1] = "o";
     if (x + 1 < 8 && y - 1 >= 0)
       if (fieldFig[x + 1][y - 1].color == "b" && predict)
         premoveField[x + 1][y - 1] = "p";
       else if (fieldFig[x + 1][y - 1].type == "none" && !predict)
         dangerField[x + 1][y - 1] = "i";
-      else if (fieldFig[x + 1][y + 1].type == "bk")
-        dangerField[x + 1][y - 1] = "o";
   } else {
     if (predict) {
       // Black pawn
@@ -868,7 +890,7 @@ function pawnMove(x, y, type, predict) {
       else if (fieldFig[x + 1][y + 1].type == "none" && !predict)
         premoveField[x + 1][y + 1] = "i";
       else if (fieldFig[x + 1][y + 1].type == "wk")
-        dangerField[x + 1][y + 1] = "o";
+        premoveField[x + 1][y + 1] = "o";
     }
     if (x - 1 >= 0 && y + 1 < 8) {
       if (fieldFig[x - 1][y + 1].color == "w" && predict)
@@ -876,7 +898,7 @@ function pawnMove(x, y, type, predict) {
       else if (fieldFig[x - 1][y + 1].type == "none" && !predict)
         premoveField[x - 1][y + 1] = "i";
       else if (fieldFig[x - 1][y + 1].type == "wk")
-        dangerField[x - 1][y + 1] = "o";
+        premoveField[x - 1][y + 1] = "o";
     }
   }
 }
@@ -957,12 +979,10 @@ function InitPosition() {
     premoveField[i] = [];
     fieldFig[i] = [];
     dangerField[i] = [];
-    boardField[i] = [];
     for (let j = 0; j < 8; j++) {
       premoveField[i][j] = "";
       fieldFig[i][j] = a;
       dangerField[i][j] = "";
-      boardField[i][j] = "";
     }
   }
 
@@ -1064,7 +1084,7 @@ function InitPosition() {
 function render() {
   for (let i = 0; i < 8; i++) {
     for (let j = 0; j < 8; j++) {
-      if (fieldFig[i][j].type != "none") {
+      if (fieldFig[i][j].type != "none" && fieldFig[i][j] != null) {
         switch (fieldFig[i][j].type) {
           case "bp":
             drawFig(i, j, bpImage);
@@ -1140,17 +1160,6 @@ function render() {
             2 * Math.PI
           );
           ctx.fill();
-        } else if (premoveField[i][j] == "r") {
-          ctx.beginPath();
-          ctx.fillStyle = "orange";
-          ctx.arc(
-            i * sizeSq + sizeSq / 2,
-            j * sizeSq + sizeSq / 2,
-            sizeSq / 10,
-            0,
-            2 * Math.PI
-          );
-          ctx.fill();
         }
         // else if (premoveField[i][j] == "i") {
         //   ctx.beginPath();
@@ -1213,9 +1222,7 @@ initCommunication();
 
 socket.onmessage = (event) => {
   let a = JSON.parse(event.data).con;
-  let b = JSON.parse(event.data).turn;
-  if (a != undefined) fieldFig = a;
-  if (b != undefined && turn != b) turn = b;
+  fieldFig = a;
 };
 
 // RESIZE WINDOW

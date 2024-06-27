@@ -31,10 +31,10 @@
     role="switch"
     aria-checked="false"
   >
-    <span>Play / pause music</span>
+    <span id="myMusic">Play / pause music</span>
   </button>
 
-  <h1 class="MyTitle">Hi! this is my chess.</h1>
+  <h1 class="MyLabel">Hi! this is my chess.</h1>
   <br />
 
   <label for="name" class="MyLabel">Type ur name:</label>
@@ -48,12 +48,12 @@
   <canvas id="MyCan" width="800px" height="800px"></canvas>
   <div style="display: none" id="pole">
     <img id="black_pawn" alt="pawn" src="./chess/images/New Piskel (1).gif" />
-    <img id="white_pawn" alt="pawn" src="./chess/images/LOGO30.bmp" />
+    <img id="white_pawn" alt="pawn" src="./chess/images//white_pawn.png" />
     <img id="black_bishop" alt="bishop" src="./chess/images/black_bishop.png" />
-    <img id="white_bishop" alt="bishop" src="./chess/images/fun.png" />
+    <img id="white_bishop" alt="bishop" src="./chess/images/white_bishop.png" />
     <img id="white_rook" alt="rook" src="./chess/images/white_rook.png" />
     <img id="black_rook" alt="rook" src="./chess/images/black_rook.png" />
-    <img id="white_queen" alt="queen" src="./chess/images/SOVA.BMP" />
+    <img id="white_queen" alt="queen" src="./chess/images/white_queen.png" />
     <img id="black_queen" alt="queen" src="./chess/images/black_queen.png" />
     <img id="white_knight" alt="knight" src="./chess/images/knight.png" />
     <img id="black_knight" alt="knight" src="./chess/images/black_knight.png" />
@@ -64,11 +64,16 @@
   <br />
   <br /><br />
   <div id="chat" size="100"></div>
-  <textarea type="text" class="text" id="mes">Write here</textarea>
+  <textarea
+    type="text"
+    class="text"
+    id="mes"
+    placeholder="Write here"
+  ></textarea>
 
-  <!-- <video autoplay muted loop id="myVideo">
+  <video autoplay muted loop id="myVideo">
     <source src="./chess/images/galaxy2.mp4" type="video/mp4" />
-  </video> -->
+  </video>
 
   <!-- <script>
     // Get the video
